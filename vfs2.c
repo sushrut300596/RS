@@ -18,7 +18,6 @@ void vdCreate(char *filename) {
 	d = open(filename, O_CREAT | O_WRONLY, 00700);
 	lseek(d, SIZE, SEEK_SET);
 	write(d, &ch, 1);
-	lseek(d,)
 	close(d);
 }
 
