@@ -13,7 +13,7 @@ void readFile(int fd, int length) {
     	while(i < length) {
       		printf("%x", str[i]);
    			i++;
-   			if(i %8 == 0)
+   			if(i % 8 == 0)
    				printf("\n");
     	}
     	printf("\n");
