@@ -52,7 +52,10 @@ void vdCreate(char *filename) {
 	SB *sb = (SB *)malloc(sizeof(struct SB));
 	sb->size_disk = SIZE;
 	sb->size_block = sb->size_disk/sb->size_disk;
-	int buf_size = 8;
+	int md_bytes = sb->size_disk/8;
+	int sb_size = md_bytes/8;
+	int flag_bytes = md_bytes - sb_size;
+	int buf_size = md_bytes;
 	char *buf = (char *)malloc(sizeof(char) * buf_size);
 	int d;
 	char ch = '\0';
@@ -60,26 +63,19 @@ void vdCreate(char *filename) {
 	lseek(d, sb->size_disk, SEEK_SET);
 	write(d, &ch, 1);
 	lseek(d, 0, SEEK_SET);
+	int n;
 	int i = 0;
-	int n, count = 0;
-	if(count == sb->size_disk) {
-		printf("ERROR : Disk size is not available\n");
+	while(i < sb_size) {
+		buf[i] = ((char *)sb)[i];
+		i++;
 	}
-	else {
-		while(count <= sb->size_disk) {
-			while(i < buf_size) {
-				// buf[i] = sb;
-				// memcpy(&buf[i], &((char *)sb)[i], 1);
-				// *((SB *)buf) = *sb;
-				buf[i] = ((char *)sb)[i];
-				i++;
-			}
-			// printf("%d, %d\n", sb->size_block, sb->size_disk);
-			// printf("%d, %d\n", ((SB *)buf)->size_block, ((SB *)buf)->size_disk);
-			n = write(d, buf, buf_size);
-			count = count + n;
-		}
+	n = write(d, buf, sb_size);
+	i = 0;
+	while(i < flag_bytes) {
+		buf[i] = 0xff;
+		i++;
 	}
+	n = write(d, buf, flag_bytes);
 	close(d);
 }
 
