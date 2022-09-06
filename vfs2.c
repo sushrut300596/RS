@@ -82,6 +82,5 @@ void vdCreate(char *filename) {
 }
 
 int main(int argc, char **argv) {
-
 	vdCreate(argv[1]);
 }
