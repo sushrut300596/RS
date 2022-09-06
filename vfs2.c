@@ -6,11 +6,11 @@
 #include <math.h>
 #include <string.h>
 
-// #define SIZE 4294967296
-#define SIZE 1024
+#define SIZE 4294967296
+// #define SIZE 1024
 
 typedef struct SB{
-	int size_disk;
+	long size_disk;
 	int size_block;
 } SB;
 
@@ -51,8 +51,9 @@ void readFile(char *filename) {
 void vdCreate(char *filename) {
 	SB *sb = (SB *)malloc(sizeof(struct SB));
 	sb->size_disk = SIZE;
-	sb->size_block = sb->size_disk/sb->size_disk;
-	int md_bytes = sb->size_disk/8;
+	sb->size_block = sb->size_disk/(1024*1024*4);
+	int no_blocks = sb->size_disk/1024;
+	int md_bytes = no_blocks/8;
 	int sb_size = md_bytes/8;
 	int flag_bytes = md_bytes - sb_size;
 	int buf_size = md_bytes;
@@ -80,5 +81,6 @@ void vdCreate(char *filename) {
 }
 
 int main(int argc, char **argv) {
+
 	vdCreate(argv[1]);
 }
