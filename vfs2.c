@@ -8,8 +8,8 @@
 #define SIZE 1024
 
 typedef struct SB{
-	int size_disk;
-	
+	unsigned char size_disk;
+	unsigned char size_MD;
 } SB;
 
 void vdCreate(char *filename) {
@@ -18,11 +18,8 @@ void vdCreate(char *filename) {
 	d = open(filename, O_CREAT | O_WRONLY, 00700);
 	lseek(d, SIZE, SEEK_SET);
 	write(d, &ch, 1);
-	close(d);
-}
-
-void writeBit() {
 	
+	close(d);
 }
 
 int main(int argc, char **argv) {
