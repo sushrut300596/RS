@@ -3,8 +3,6 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <fcntl.h>
-#include <math.h>
-#include <string.h>
 
 // #define SIZE 4294967296
 // #define SIZE 1024
