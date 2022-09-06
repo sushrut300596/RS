@@ -4,6 +4,7 @@
 #include <sys/types.h>
 #include <fcntl.h>
 #include <math.h>
+#include <string.h>
 
 // #define SIZE 4294967296
 #define SIZE 1024
@@ -52,7 +53,7 @@ void vdCreate(char *filename) {
 	sb->size_disk = SIZE;
 	sb->size_block = sb->size_disk/sb->size_disk;
 	int buf_size = 8;
-	void *buf = (void *)malloc(sizeof(void) * buf_size);
+	char *buf = (char *)malloc(sizeof(char) * buf_size);
 	int d;
 	char ch = '\0';
 	d = open(filename, O_CREAT | O_WRONLY, 00700);
@@ -65,11 +66,17 @@ void vdCreate(char *filename) {
 		printf("ERROR : Disk size is not available\n");
 	}
 	else {
-		while(count != sb->size_disk) {
+		while(count <= sb->size_disk) {
 			while(i < buf_size) {
-				
+				// buf[i] = sb;
+				// memcpy(&buf[i], &((char *)sb)[i], 1);
+				// *((SB *)buf) = *sb;
+				buf[i] = ((char *)sb)[i];
+				i++;
 			}
-			n = write(d, buf, buf_size)
+			// printf("%d, %d\n", sb->size_block, sb->size_disk);
+			// printf("%d, %d\n", ((SB *)buf)->size_block, ((SB *)buf)->size_disk);
+			n = write(d, buf, buf_size);
 			count = count + n;
 		}
 	}
