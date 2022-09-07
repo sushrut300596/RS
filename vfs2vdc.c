@@ -22,8 +22,8 @@ void vdCreate(char *filename, int size, char b) {
 	double md_bytes = no_blocks/8;
 	double no_blocks_md = ceil(md_bytes/8);
 	double flag_bytes_md = ceil(no_blocks_md/8);
-	// double sb_size = ;
-	double flag_bytes = md_bytes - flag_bytes_md;
+	double sb_size = sizeof(struct SB);
+	double flag_bytes = md_bytes - flag_bytes_md /*+ sb_size)*/;
 	double buf_size = md_bytes;
 	char *buf = (char *)malloc(sizeof(char) * buf_size);
 	int d;
@@ -46,12 +46,12 @@ void vdCreate(char *filename, int size, char b) {
 	}
 	n = write(d, buf, flag_bytes);
 	close(d);
-	printf("size : %ld\n", sb->size_disk);
+	printf("size_disk : %ld\n", sb->size_disk);
 	printf("no_blocks : %f\n", no_blocks);
 	printf("md_bytes : %f\n", md_bytes);
 	printf("no_blocks_md : %f\n", no_blocks_md);
 	printf("flag_bytes_md : %f\n", flag_bytes_md);
-	// printf("sb_size : %d\n", sb_size);
+	printf("sb_size : %f\n", sb_size);
 	printf("flag_bytes : %f\n", flag_bytes);
 }
 
