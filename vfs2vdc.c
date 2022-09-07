@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <fcntl.h>
-#include <math.h>
+#include "math.h"
 
 // #define SIZE 4294967296
 // #define SIZE 1024
@@ -22,7 +22,7 @@ void vdCreate(char *filename, int size, char b) {
 	double md_bytes = no_blocks/8;
 	double no_blocks_md = ceil(md_bytes/8);
 	double flag_bytes_md = ceil(no_blocks_md/8);
-	// int sb_size = sizeof(struct SB);
+	// double sb_size = ;
 	double flag_bytes = md_bytes - flag_bytes_md;
 	double buf_size = md_bytes;
 	char *buf = (char *)malloc(sizeof(char) * buf_size);
