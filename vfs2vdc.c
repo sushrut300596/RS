@@ -6,16 +6,16 @@
 
 // #define SIZE 4294967296
 // #define SIZE 1024
-#define SIZE 1024*1024
+// #define SIZE 1024*1024
 
 typedef struct SB{
 	long size_disk;
 	int size_block;
 } SB;
 
-void vdCreate(char *filename) {
+void vdCreate(char *filename, int size, char b) {
 	SB *sb = (SB *)malloc(sizeof(struct SB));
-	sb->size_disk = SIZE;
+	sb->size_disk = size*1024*1024;
 	sb->size_block = 1024;
 	int no_blocks = sb->size_disk/sb->size_block;
 	int md_bytes = no_blocks/8;
@@ -31,7 +31,7 @@ void vdCreate(char *filename) {
 	lseek(d, 0, SEEK_SET);
 	int n;
 	int i = 0;
-	while(i < sb_size) {
+	while(i < sizeof(struct SB)) {
 		buf[i] = ((char *)sb)[i];
 		i++;
 	}
@@ -46,5 +46,14 @@ void vdCreate(char *filename) {
 }
 
 int main(int argc, char **argv) {
-	vdCreate(argv[1]);
+	// if(argv[3][0] == 'K') {
+	// 	vdCreate(argv[1], atoi(argv[2]), argv[3][0]);
+	// }
+	if(argv[3][0] == 'M') {
+		vdCreate(argv[1], atoi(argv[2]), argv[3][0]);
+	}
+	else if(argv[3][0] == 'G') {
+		vdCreate(argv[1], atoi(argv[2]), argv[3][0]);
+	}
+	// vdCreate(argv[1]);
 }
