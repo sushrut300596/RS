@@ -16,7 +16,12 @@ typedef struct SB{
 
 void vdCreate(char *filename, int size, char b) {
 	SB *sb = (SB *)malloc(sizeof(struct SB));
-	sb->size_disk = size*1024*1024;
+	if(b == 'M') {
+		sb->size_disk = size*1024*1024;
+	}
+	if(b == 'G') {
+		sb->size_disk = size*1024*1024*1024;
+	}
 	sb->size_block = 1024;
 	double no_blocks = sb->size_disk/sb->size_block;
 	double md_bytes = no_blocks/8;
@@ -37,8 +42,8 @@ void vdCreate(char *filename, int size, char b) {
 		i++;
 	}
 	n = write(d, buf, sizeof(struct SB));
-	buf[0] = 0x7f;
-	i = 1;
+	// buf[0] = 0x7f;
+	i = 0;
 	while(i < flag_bytes) {
 		buf[i] = 0xff;
 		i++;
