@@ -23,10 +23,11 @@ void vdCreate(char *filename, int size, char b) {
 		sb->size_disk = size*1024*1024*1024;
 	}
 	sb->size_block = 1024;
-	double no_blocks = sb->size_disk/sb->size_block;
-	double md_bytes = no_blocks/8;
+	double no_blocks = ceil(sb->size_disk/sb->size_block);
+	double md_bytes = ceil(no_blocks/8);
 	double sb_size = sizeof(struct SB);
 	double flag_bytes = md_bytes;
+	double no_blocks_flags;
 	double buf_size = md_bytes;
 	char *buf = (char *)malloc(sizeof(char) * buf_size);
 	int d;
@@ -42,7 +43,12 @@ void vdCreate(char *filename, int size, char b) {
 		i++;
 	}
 	n = write(d, buf, sizeof(struct SB));
-	// buf[0] = 0x7f;
+	if(flag_bytes > 1024) {
+		no_blocks_flags = ceil(flag_bytes/sb->size_block);
+	}
+	else if(flag_bytes < 1024) {
+		no_blocks_flags = 1;
+	}
 	i = 0;
 	while(i < flag_bytes) {
 		buf[i] = 0xff;
