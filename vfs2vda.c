@@ -38,6 +38,11 @@ void readFile(char *filename) {
 	close(fd);	
 }
 
+void vdAllocate(char *filename) {
+	int d;
+	
+}
+
 int main(int argc, char **argv) {
     
 }

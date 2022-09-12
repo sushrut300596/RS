@@ -25,7 +25,7 @@ void vdCreate(char *filename, int size, char b) {
 	sb->size_block = 1024;
 	double no_blocks = my_ceil(sb->size_disk/sb->size_block);
 	double md_bytes = my_ceil(no_blocks/8);
-	double sb_size = sizeof(struct SB);
+	int sb_size = sizeof(struct SB);
 	double flag_bytes = md_bytes;
 	double no_blocks_flags;
 	int buf_size = md_bytes;
@@ -57,6 +57,7 @@ void vdCreate(char *filename, int size, char b) {
 		buf[i] = 0xff;
 		i++;
 	}
+	printf("no_blocks_flags : %d\n", (int)no_blocks_flags);
 	i = 0;
 	while(no_blocks_flags >= 0) {
 		buf[i] >>= (int)no_blocks_flags;
@@ -68,9 +69,8 @@ void vdCreate(char *filename, int size, char b) {
 	printf("size_disk : %ld\n", sb->size_disk);
 	printf("no_blocks : %f\n", no_blocks);
 	printf("md_bytes : %f\n", md_bytes);
-	printf("sb_size : %f\n", sb_size);
+	printf("sb_size : %d\n", sb_size);
 	printf("flag_bytes : %f\n", flag_bytes);
-	printf("no_blocks_flags : %d\n", (int)no_blocks_flags);
 }
 
 int main(int argc, char **argv) {
