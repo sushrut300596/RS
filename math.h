@@ -5,7 +5,7 @@ int my_ceil(double x) {
     return num + 1;
 }
 
-double my_floor(double x) {
+int my_floor(double x) {
     int num = (int)x;
     if(x == (double)num)
         return num - 1;

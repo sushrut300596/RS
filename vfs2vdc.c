@@ -14,6 +14,12 @@ typedef struct SB{
 	int size_block;
 } SB;
 
+typedef struct FMD {
+	char *filename;
+	int file_size;
+	
+} FMD;
+
 void vdCreate(char *filename, int size, char b) {
 	SB *sb = (SB *)malloc(sizeof(struct SB));
 	if(b == 'M') {
