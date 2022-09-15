@@ -12,13 +12,23 @@
 typedef struct SB{
 	long size_disk;
 	int size_block;
+	int size_fmd;
 } SB;
 
 typedef struct FMD {
 	char *filename;
 	int file_size;
-	
+	int *fp;
 } FMD;
+
+typedef union header {
+	FMD fmd;
+	struct {
+		union header *next;
+	} node;
+} Header;
+
+
 
 void vdCreate(char *filename, int size, char b) {
 	SB *sb = (SB *)malloc(sizeof(struct SB));
@@ -63,7 +73,7 @@ void vdCreate(char *filename, int size, char b) {
 		buf[i] = 0xff;
 		i++;
 	}
-	printf("no_blocks_flags : %d\n", no_blocks_flags);
+	// printf("no_blocks_flags : %d\n", no_blocks_flags);
 	i = 0;
 	while(no_blocks_flags >= 0) {
 		buf[i] >>= no_blocks_flags;
@@ -72,14 +82,17 @@ void vdCreate(char *filename, int size, char b) {
 	}
 	n = write(d, buf, flag_bytes);
 	close(d);
-	printf("size_disk : %ld\n", sb->size_disk);
-	printf("no_blocks : %d\n", no_blocks);
-	printf("md_bytes : %d\n", md_bytes);
-	printf("sb_size : %d\n", sb_size);
-	printf("flag_bytes : %d\n", flag_bytes);
+	// printf("size_disk : %ld\n", sb->size_disk);
+	// printf("no_blocks : %d\n", no_blocks);
+	// printf("md_bytes : %d\n", md_bytes);
+	// printf("sb_size : %d\n", sb_size);
+	// printf("flag_bytes : %d\n", flag_bytes);
 }
 
 int main(int argc, char **argv) {
+	printf("%ld\n", sizeof(FMD));
+	exit(1);
+
 	if(argv[3][0] == 'M') {
 		vdCreate(argv[1], atoi(argv[2]), argv[3][0]);
 	}
