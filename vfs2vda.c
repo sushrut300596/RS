@@ -3,8 +3,25 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <fcntl.h>
+#include "math.h"
 
-void writeFile(char *filename) {
+typedef struct FMD {
+	int filename_length;
+	int file_size;
+	int *fp;
+} FMD;
+
+typedef union header {
+	FMD fmd;
+	struct {
+		union header *next;
+	}s;
+} Header;
+
+Header base;
+Header *freep = NULL;
+
+/*void writeFile(char *filename) {
 	int fd;
 	int buf_size = 8;
 	void *buf = (void *)malloc(sizeof(void) * buf_size);
@@ -36,7 +53,7 @@ void readFile(char *filename) {
 		count = count + n;
 	}
 	close(fd);	
-}
+}*/
 
 void vdAllocate(char *filename) {
 	int d;
@@ -44,5 +61,8 @@ void vdAllocate(char *filename) {
 }
 
 int main(int argc, char **argv) {
+    printf("%ld\n", sizeof(Header));
+    exit(1);
+
     
 }
