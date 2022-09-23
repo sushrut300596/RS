@@ -1,4 +1,4 @@
-// A C program for substring check using Ukkonen's Suffix Tree Construction
+// A C program to implement Ukkonen's Suffix Tree Construction
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -14,7 +14,7 @@ struct SuffixTreeNode {
 	node is connected to its parent node. Each edge will
 	connect two nodes, one parent and one child, and
 	(start, end) interval of a given edge will be stored
-	in the child node. Let's say there are two nods A and B
+	in the child node. Lets say there are two nods A and B
 	connected by an edge with indices (5, 8) then this
 	indices (5, 8) will be stored in node B. */
 	int start;
@@ -39,8 +39,9 @@ suffix link reset to new internal node created in next
 extension of same phase. */
 Node *lastNewNode = NULL;
 Node *activeNode = NULL;
+int count=0;
 
-/*activeEdge is represented as an input string character
+/*activeEdge is represented as input string character
 index (not the character itself)*/
 int activeEdge = -1;
 int activeLength = 0;
@@ -55,6 +56,7 @@ int size = -1; //Length of input string
 
 Node *newNode(int start, int *end)
 {
+	count++;
 	Node *node =(Node*) malloc(sizeof(Node));
 	int i;
 	for (i = 0; i < MAX_CHAR; i++)
@@ -76,8 +78,6 @@ Node *newNode(int start, int *end)
 }
 
 int edgeLength(Node *n) {
-	if(n == root)
-		return 0;
 	return *(n->end) - (n->start) + 1;
 }
 
@@ -90,7 +90,8 @@ int walkDown(Node *currNode)
 	accordingly to represent same activePoint*/
 	if (activeLength >= edgeLength(currNode))
 	{
-		activeEdge += edgeLength(currNode);
+		activeEdge =
+		(int)text[activeEdge+edgeLength(currNode)]-(int)' ';
 		activeLength -= edgeLength(currNode);
 		activeNode = currNode;
 		return 1;
@@ -117,15 +118,17 @@ void extendSuffixTree(int pos)
 	//Add all suffixes (yet to be added) one by one in tree
 	while(remainingSuffixCount > 0) {
 
-		if (activeLength == 0)
-			activeEdge = pos; //APCFALZ
-
+		if (activeLength == 0) {
+			//APCFALZ
+			activeEdge = (int)text[pos]-(int)' ';
+		}
 		// There is no outgoing edge starting with
 		// activeEdge from activeNode
-		if (activeNode->children[remainingSuffixCount] == NULL)
+		if (activeNode->children[activeEdge] == NULL)
 		{
 			//Extension Rule 2 (A new leaf edge gets created)
-			activeNode->children[remainingSuffixCount] = newNode(pos, &leafEnd);
+			activeNode->children[activeEdge] =
+								newNode(pos, &leafEnd);
 
 			/*A new leaf edge is created in above line starting
 			from an existing node (the current activeNode), and
@@ -146,7 +149,7 @@ void extendSuffixTree(int pos)
 		{
 			// Get the next node at the end of edge starting
 			// with activeEdge
-			Node *next = activeNode->children[remainingSuffixCount];
+			Node *next = activeNode->children[activeEdge];
 			if (walkDown(next))//Do walkdown
 			{
 				//Start from next node (the new activeNode)
@@ -172,7 +175,7 @@ void extendSuffixTree(int pos)
 				break;
 			}
 
-			/*We will be here when activePoint is in the middle of
+			/*We will be here when activePoint is in middle of
 			the edge being traversed and current character
 			being processed is not on the edge (we fall off
 			the tree). In this case, we add a new internal node
@@ -184,12 +187,13 @@ void extendSuffixTree(int pos)
 
 			//New internal node
 			Node *split = newNode(next->start, splitEnd);
-			activeNode->children[remainingSuffixCount] = split;
+			activeNode->children[activeEdge] = split;
 
 			//New leaf coming out of new internal node
-			split->children[activeLength] = newNode(pos, &leafEnd);
+			split->children[(int)text[pos]-(int)' '] =
+									newNode(pos, &leafEnd);
 			next->start += activeLength;
-			split->children[activeLength] = next;
+			split->children[activeEdge] = next;
 
 			/*We got a new internal node here. If there is any
 			internal node created in last extensions of same
@@ -219,9 +223,12 @@ void extendSuffixTree(int pos)
 		if (activeNode == root && activeLength > 0) //APCFER2C1
 		{
 			activeLength--;
-			activeEdge = pos - remainingSuffixCount + 1;
+			activeEdge = (int)text[pos -
+							remainingSuffixCount + 1]-(int)' ';
 		}
-		else if (activeNode != root) //APCFER2C2
+		
+		//APCFER2C2
+		else if (activeNode != root)
 		{
 			activeNode = activeNode->suffixLink;
 		}
@@ -245,8 +252,7 @@ void setSuffixIndexByDFS(Node *n, int labelHeight)
 	if (n->start != -1) //A non-root node
 	{
 		//Print the label on edge from parent to current node
-		//Uncomment below line to print suffix tree
-	// print(n->start, *(n->end));
+		print(n->start, *(n->end));
 	}
 	int leaf = 1;
 	int i;
@@ -254,22 +260,20 @@ void setSuffixIndexByDFS(Node *n, int labelHeight)
 	{
 		if (n->children[i] != NULL)
 		{
-			//Uncomment below two lines to print suffix index
-		// if (leaf == 1 && n->start != -1)
-			// printf(" [%d]\n", n->suffixIndex);
+			if (leaf == 1 && n->start != -1)
+				printf(" [%d]\n", n->suffixIndex);
 
 			//Current node is not a leaf as it has outgoing
 			//edges from it.
 			leaf = 0;
-			setSuffixIndexByDFS(n->children[i], labelHeight +
-								edgeLength(n->children[i]));
+			setSuffixIndexByDFS(n->children[i],
+				labelHeight + edgeLength(n->children[i]));
 		}
 	}
 	if (leaf == 1)
 	{
 		n->suffixIndex = size - labelHeight;
-		//Uncomment below line to print suffix index
-		//printf(" [%d]\n", n->suffixIndex);
+		printf(" [%d]\n", n->suffixIndex);
 	}
 }
 
@@ -309,76 +313,17 @@ void buildSuffixTree()
 		extendSuffixTree(i);
 	int labelHeight = 0;
 	setSuffixIndexByDFS(root, labelHeight);
-}
 
-int traverseEdge(char *str, int idx, int start, int end)
-{
-	int k = 0;
-	//Traverse the edge with character by character matching
-	for(k=start; k<=end && str[idx] != '\0'; k++, idx++)
-	{
-		if(text[k] != str[idx])
-			return -1; // mo match
-	}
-	if(str[idx] == '\0')
-		return 1; // match
-	return 0; // more characters yet to match
-}
-
-int doTraversal(Node *n, char* str, int idx)
-{
-	if(n == NULL)
-	{
-		return -1; // no match
-	}
-	int res = -1;
-	//If node n is not root node, then traverse edge
-	//from node n's parent to node n.
-	if(n->start != -1)
-	{
-		res = traverseEdge(str, idx, n->start, *(n->end));
-		if(res != 0)
-			return res; // match (res = 1) or no match (res = -1)
-	}
-	//Get the character index to search
-	idx = idx + edgeLength(n);
-	//If there is an edge from node n going out
-	//with current character str[idx], traverse that edge
-	if(n->children[str[idx]] != NULL)
-		return doTraversal(n->children[str[idx]], str, idx);
-	else
-		return -1; // no match
-}
-
-void checkForSubString(char* str)
-{
-	int res = doTraversal(root, str, 0);
-	if(res == 1)
-		printf("Pattern <%s> is a Substring\n", str);
-	else
-		printf("Pattern <%s> is NOT a Substring\n", str);
+	//Free the dynamically allocated memory
+	freeSuffixTreeByPostOrder(root);
 }
 
 // driver program to test above functions
 int main(int argc, char *argv[])
 {
-	strcpy(text, "THIS IS A TEST TEXT$");
+	strcpy(text, "abbc");
 	buildSuffixTree();
-
-	checkForSubString("TEST");
-	checkForSubString("A");
-	checkForSubString(" ");
-	checkForSubString("IS A");
-	checkForSubString(" IS A ");
-	checkForSubString("TEST1");
-	checkForSubString("THIS IS GOOD");
-	checkForSubString("TES");
-	checkForSubString("TESA");
-	checkForSubString("ISB");
-
-	//Free the dynamically allocated memory
-	freeSuffixTreeByPostOrder(root);
-
+	printf("Number of nodes in suffix tree are %d\n",count);
 	return 0;
 }
 
