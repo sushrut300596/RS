@@ -10,7 +10,7 @@
 char *filename;
 int file_size;
 
-void addFile(char *vdName, char *filename, int file_size, char *content) {
+/*void addFile(char *vdName, char *filename, int file_size, char *content) {
 	int d = open(vdName, O_RDONLY);
 	unsigned char *buf = malloc(sizeof(unsigned char) * BUFSIZE);
 	if(d != -1) {
@@ -25,7 +25,7 @@ void addFile(char *vdName, char *filename, int file_size, char *content) {
 			count = count + n;
 		}
 	}
-}
+}*/
 
 int main(int argc, char **argv) {
 
@@ -41,6 +41,7 @@ int main(int argc, char **argv) {
 
 		if (a == 1)
 		{
+			filename = malloc(256);
 			printf("Enter Filename \t:\t");
 			ch = getchar();
 			scanf("%[^\n]", filename);
@@ -48,11 +49,11 @@ int main(int argc, char **argv) {
 			printf("Enter the size of File in bytes \t:\t");
 			scanf("%d", &file_size);
 			
-			printf("Enter Contain \t:\t");
+			printf("Enter Content \t:\t");
 			ch = getchar();
 			scanf("%[^\n]", content);
 
-			addFile(argv[1], filename, file_size, content);
+			// addFile(argv[1], filename, file_size, content);
 
 			// printf("%s\n", filename);
 			// printf("%s\n", contain);
