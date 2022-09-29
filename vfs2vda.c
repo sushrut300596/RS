@@ -6,9 +6,9 @@
 #include "math.h"
 
 typedef struct FMD {
-	int filename_length;
+	char file_name[248];
 	int file_size;
-	int *fp;
+	int block_no;
 } FMD;
 
 typedef union header {
@@ -21,48 +21,14 @@ typedef union header {
 Header base;
 Header *freep = NULL;
 
-/*void writeFile(char *filename) {
-	int fd;
-	int buf_size = 8;
-	void *buf = (void *)malloc(sizeof(void) * buf_size);
-	fd = open(filename, O_CREAT | O_WRONLY, 00700);
-	int n, count = 0;
-	int i = 0;
-	while(count != SIZE) {
-		while(i < buf_size) {
-			// code
-		}
-		n = write(fd, buf, buf_size);
-		count = count + n;
-	}
-	close(fd);
-}
 
-void readFile(char *filename) {
-	int buf_size = 8;
-	void *buf = (void *)malloc(sizeof(void) * buf_size);
-	int fd;
-	fd = open(filename, O_RDONLY);
-	int i = 0;
-	int n, count = 0;
-	while(count != SIZE) {
-		n = read(fd, buf, buf_size);
-		while(i < buf_size) {
-			// code
-		}
-		count = count + n;
-	}
-	close(fd);	
-}*/
 
-void vdAllocate(char *filename) {
+void vdAllocate(char *diskname) {
 	int d;
 	
 }
 
 int main(int argc, char **argv) {
     printf("%ld\n", sizeof(Header));
-    exit(1);
-
-    
+    exit(1);   
 }

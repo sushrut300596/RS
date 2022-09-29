@@ -15,19 +15,6 @@ typedef struct SB{
 	long size_fmd;
 } SB;
 
-typedef struct FMD {
-	char file_name[248];
-	int file_size;
-	int block_no;
-} FMD;
-
-typedef union header {
-	FMD fmd;
-	struct {
-		union header *next;
-	}s;
-} Header;
-
 void vdCreate(char *diskname, int size, char b) {
 	SB *sb = (SB *)malloc(sizeof(struct SB));
 	if(b == 'M') {
