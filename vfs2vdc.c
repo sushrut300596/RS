@@ -12,7 +12,7 @@
 typedef struct SB{
 	long size_disk;
 	int size_block;
-	int size_fmd;
+	long size_fmd;
 } SB;
 
 typedef struct FMD {
@@ -51,7 +51,8 @@ void vdCreate(char *diskname, int size, char b) {
 
 	int no_bit_move = 0;
 
-	sb->size_fmd = my_ceil((double)sb->size_disk/65);
+	sb->size_fmd = my_ceil((double)sb->size_disk/100)*3;
+	printf("size_fmd : %ld\n", sb->size_fmd);
 	int no_blocks_fmd = my_ceil((double)sb->size_fmd/sb->size_block);
 
 	printf("no_blocks_fmd : %d\n", no_blocks_fmd);
