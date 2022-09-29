@@ -15,13 +15,36 @@ typedef struct SB{
 	int size_fmd;
 } SB;
 
-void vdCreate(char *filename, int size, char b) {
+typedef struct FMD {
+	char file_name[248];
+	int file_size;
+	int block_no;
+} FMD;
+
+typedef union header {
+	FMD fmd;
+	struct {
+		union header *next;
+	}s;
+} Header;
+
+void vdCreate(char *diskname, int size, char b) {
 	SB *sb = (SB *)malloc(sizeof(struct SB));
 	if(b == 'M') {
-		sb->size_disk = size*1024*1024;
+		if(size < 1) {
+			printf("cannot give that low disk\n");
+		}
+		else {
+			sb->size_disk = size * 1024 * 1024;
+		}
 	}
 	if(b == 'G') {
-		sb->size_disk = size*1024*1024*1024;
+		if(size > 4) {
+			printf("cannot give that much disk\n");
+		}
+		else {
+			sb->size_disk = size * 1024 * 1024 *1024;
+		}
 	}
 	
 	sb->size_block = 1024;
@@ -42,13 +65,13 @@ void vdCreate(char *filename, int size, char b) {
 	int flag_bytes = md_bytes;
 	int no_blocks_flags;
 	
-	int buf_size = 1024*1024;
+	int buf_size = 1024 * 1024;
 	unsigned char *buf = (unsigned char *)malloc(sizeof(unsigned char) * buf_size);
 	
 	int d;
 	char ch = '#';
 	
-	d = open(filename, O_CREAT | O_WRONLY, 00700);
+	d = open(diskname, O_CREAT | O_WRONLY, 00700);
 	lseek(d, sb->size_disk, SEEK_SET);
 	
 	write(d, &ch, 1);
@@ -100,7 +123,6 @@ void vdCreate(char *filename, int size, char b) {
 	}
 	
 	n = write(d, buf, flag_bytes);
-	close(d);
 	
 	printf("size_disk : %ld\n", sb->size_disk);
 	printf("no_blocks : %d\n", no_blocks);
