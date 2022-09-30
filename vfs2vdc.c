@@ -47,10 +47,11 @@ void vdCreate(char *diskname, int size, char b) {
 	no_bit_move += no_blocks_fmd;
 
 	int no_blocks = my_ceil((double)sb->size_disk/sb->size_block);
-	int md_bytes = my_ceil((double)no_blocks/8);
 	int sb_size = sizeof(struct SB);
+	int md_bytes = (my_ceil((double)no_blocks/8)) + sb_size;
 	
-	int flag_bytes = md_bytes;
+	
+	int flag_bytes = md_bytes - sb_size;
 	int no_blocks_flags;
 	
 	int buf_size = 1024 * 1024;
