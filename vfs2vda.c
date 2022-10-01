@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -18,27 +19,45 @@ typedef union header {
 	}s;
 } Header;
 
-Header base;
-Header *freep = NULL;
-
-void vdAllocate(char *diskname, char *filename, int size, char b) {
+void vdAllocate(char *diskname, char *filename) {
 	Header *head = malloc(sizeof(Header));
+	
 	int d, fd;
 	d = open(diskname, O_RDWR);
 	fd = open(filename, O_RDONLY);
-	if(b == 'M') {
-		head->fmd.file_size = size * 1024 * 1024;
+	
+	int size = lseek(fd, 0, SEEK_END);
+	if(size < (2 * 1024 * 1024)) {
+		head->fmd.file_size = size;
 	}
+	strcpy(head->fmd.file_name,filename);
+	head->fmd.block_no = 63;
+	
 	unsigned char *buf = (unsigned char *)malloc(sizeof(unsigned char) * head->fmd.file_size);
+	unsigned char *write_buf = (unsigned char *)malloc(sizeof(unsigned char) * 1024);
+	
 	int n;
+	lseek(fd, 0, SEEK_SET);
 	read(fd, buf, head->fmd.file_size);
 	lseek(d, 62916, SEEK_SET);
-	write(d, buf, head->fmd.file_size);
-	lseek(d, 25, SEEK_SET);
-	read(d, buf, 256);
+	int i = 0;
+	int count = 0;
+	while(count < head->fmd.file_size) {
+		while(i < 1024) {
+			write_buf[i] = buf[i];
+			i++;
+		}
+		n = write(d, write_buf, 1024);
+		count = count + n;
+	}
+	
+	lseek(d, 31, SEEK_SET);
+	read(d, buf, 224);
+	
 	int no_blocks = my_ceil((double)head->fmd.file_size/1024);
 	printf("%d\n", no_blocks);
-	int i = 0;
+	
+	i = 0;
 	while(no_blocks >= 0) {
 		if(no_blocks >= 8) {
 			buf[i] >>= 8;
@@ -49,8 +68,8 @@ void vdAllocate(char *diskname, char *filename, int size, char b) {
 		i++;
 		no_blocks -= 8;
 	}
-	lseek(d, 25, SEEK_SET);
-	write(d, buf, 256);
+	lseek(d, 31, SEEK_SET);
+	write(d, buf, 224);
 	close(d);
 }
 
@@ -58,5 +77,5 @@ int main(int argc, char **argv) {
     // printf("%ld\n", sizeof(Header));
     // exit(1);
 
-	vdAllocate(argv[1], argv[2], atoi(argv[3]), argv[4][0]);   
+	vdAllocate(argv[1], argv[2]);   
 }
