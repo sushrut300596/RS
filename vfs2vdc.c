@@ -118,8 +118,8 @@ void vdCreate(char *diskname, int size, char b) {
 }
 
 int main(int argc, char **argv) {
-	printf("%ld\n", sizeof(SB));
-	exit(1);
+	// printf("%ld\n", sizeof(SB));
+	// exit(1);
 
 	if(argv[3][0] == 'M') {
 		vdCreate(argv[1], atoi(argv[2]), argv[3][0]);
