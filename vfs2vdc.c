@@ -4,16 +4,13 @@
 #include <sys/types.h>
 #include <fcntl.h>
 #include "math.h"
+#include "vdc.h"
 
 // #define SIZE 4294967296
 // #define SIZE 1024
 // #define SIZE 1024*1024
 
-typedef struct SB{
-	long size_disk;
-	int size_block;
-	long size_fmd;
-} SB;
+int buf_size = 1024 * 1024;
 
 void vdCreate(char *diskname, int size, char b) {
 	SB *sb = (SB *)malloc(sizeof(struct SB));
@@ -52,9 +49,9 @@ void vdCreate(char *diskname, int size, char b) {
 	
 	
 	int flag_bytes = md_bytes - sb_size;
+	sb->size_bitmap = flag_bytes;
 	int no_blocks_flags;
 	
-	int buf_size = 1024 * 1024;
 	unsigned char *buf = (unsigned char *)malloc(sizeof(unsigned char) * buf_size);
 	
 	int d;
@@ -70,17 +67,17 @@ void vdCreate(char *diskname, int size, char b) {
 	int n;
 	
 	int i = 0;
-	while(i < sb_size) {
-		buf[i] = ((char *)sb)[i];
-		i++;
-	}
+	// while(i < sb_size) {
+	// 	buf[i] = ((char *)sb)[i];
+	// 	i++;
+	// }
 	
-	n = write(d, buf, sb_size);
+	n = write(d, sb, sb_size);
 	
-	if(flag_bytes > 1024) {
-		no_blocks_flags = my_ceil((double)flag_bytes/sb->size_block);
+	if(sb->size_bitmap > 1024) {
+		no_blocks_flags = my_ceil((double)sb->size_bitmap/sb->size_block);
 	}
-	else if(flag_bytes < 1024) {
+	else if(sb->size_bitmap < 1024) {
 		no_blocks_flags = 1;
 	}
 	else {
@@ -88,7 +85,7 @@ void vdCreate(char *diskname, int size, char b) {
 	}
 
 	i = 0;
-	while(i < flag_bytes) {
+	while(i < sb->size_bitmap) {
 		buf[i] = 0xff;
 		i++;
 	}
@@ -111,18 +108,18 @@ void vdCreate(char *diskname, int size, char b) {
 		no_bit_move -= 8;
 	}
 	
-	n = write(d, buf, flag_bytes);
+	n = write(d, buf, sb->size_bitmap);
 	
 	printf("size_disk : %ld\n", sb->size_disk);
 	printf("no_blocks : %d\n", no_blocks);
 	printf("md_bytes : %d\n", md_bytes);
 	printf("sb_size : %d\n", sb_size);
-	printf("flag_bytes : %d\n", flag_bytes);
+	printf("flag_bytes : %ld\n", sb->size_bitmap);
 }
 
 int main(int argc, char **argv) {
-	// printf("%ld\n", sizeof(Header));
-	// exit(1);
+	printf("%ld\n", sizeof(SB));
+	exit(1);
 
 	if(argv[3][0] == 'M') {
 		vdCreate(argv[1], atoi(argv[2]), argv[3][0]);
