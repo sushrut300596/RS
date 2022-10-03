@@ -17,7 +17,7 @@ unsigned char *bitmap_to_array(SB *sb) {
     return bmap;
 }
 
-void find_empty_blocks(unsigned char *bmap, SB *sb) {
+int find_empty_blocks(unsigned char *bmap, SB *sb) {
     int i = 0;
     int j = 0;
     unsigned char bit = 0x01;
@@ -35,22 +35,29 @@ void find_empty_blocks(unsigned char *bmap, SB *sb) {
         i++;
     }
     // printf("%d\n", free_blocks);
+    return free_blocks;
 }
 
-void set_bitmap(unsigned char *bmap) {
-
+int find_first_empty_block(int free_blocks, SB *sb) {
+    return ((sb->size_bitmap * 8) - free_blocks);
 }
 
-int main() {
+void set_bitmap(unsigned char *bmap, int block_no) {
+    
+}
+
+/*int main() {
     SB *sb = malloc(sizeof(SB));
     d = open("disk", O_RDWR);
     read(d, sb, sizeof(SB));
     unsigned char *bmap = bitmap_to_array(sb);
-    find_empty_blocks(bmap, sb);
+    int free_blocks = find_empty_blocks(bmap, sb);
+    int block_no = find_first_empty_block(free_blocks, sb);
+    // printf("%d\n", block_no);
     // int i = 0;
     // while(i < sb->size_bitmap) {
     //     printf("%02x\t", bmap[i]);
     //     i++;
     // }
     // printf("\n");
-}
+}*/

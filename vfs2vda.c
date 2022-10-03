@@ -7,13 +7,26 @@
 #include "math.h"
 #include "vda.c"
 
-#define BUF_SIZE 1024
-#define FILE_SIZE_MULTIPLE 1024
+/*#define BUF_SIZE 1024
+#define FILE_SIZE_MULTIPLE 1024*/
 
 void vdAllocate(char *diskname, char *filename) {
 	FMD *fmd = malloc(sizeof(FMD));
-	
-	int d, fd;
+	SB *sb = malloc(sizeof(SB));
+
+	d = open(diskname, O_RDWR);
+
+	read(d, sb, sizeof(SB));
+
+    unsigned char *bmap = bitmap_to_array(sb);
+    int free_blocks = find_empty_blocks(bmap, sb);
+    int block_no = find_first_empty_block(free_blocks, sb);
+
+
+
+	int pos = add_file(diskname, filename, sb, fmd, block_no);
+	printf("%d\n", pos);
+	/*int d, fd;
 	d = open(diskname, O_RDWR);
 	fd = open(filename, O_RDONLY);
 	
@@ -81,7 +94,7 @@ void vdAllocate(char *diskname, char *filename) {
 	lseek(d, 32, SEEK_SET);
 	write(d, buf, 224);
 	
-	close(d);
+	close(d);*/
 }
 
 int main(int argc, char **argv) {
