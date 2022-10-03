@@ -42,8 +42,18 @@ int find_first_empty_block(int free_blocks, SB *sb) {
     return ((sb->size_bitmap * 8) - free_blocks);
 }
 
-void set_bitmap(unsigned char *bmap, int block_no) {
-    
+void set_bitmap(unsigned char *bmap, int no_blocks) {
+    int i = 0;
+    while(no_blocks >= 0) {
+        if(no_blocks >= 8) {
+            bmap[i] >>= 8;
+        }
+        else {
+            bmap[i] >>= no_blocks;
+        }
+        i++;
+        no_blocks -= 8;
+    }
 }
 
 /*int main() {

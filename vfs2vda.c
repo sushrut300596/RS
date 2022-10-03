@@ -22,10 +22,18 @@ void vdAllocate(char *diskname, char *filename) {
     int free_blocks = find_empty_blocks(bmap, sb);
     int block_no = find_first_empty_block(free_blocks, sb);
 
-
-
 	int pos = add_file(diskname, filename, sb, fmd, block_no);
-	printf("%d\n", pos);
+	
+	int blocks = pos + my_ceil((double)fmd->file_size/sb->size_block);
+
+	// printf("%d\n", blocks);
+
+	set_bitmap(bmap, blocks);
+
+	lseek(d, sizeof(SB), SEEK_SET);
+
+	write(d, bmap, sb->size_bitmap);
+	
 	/*int d, fd;
 	d = open(diskname, O_RDWR);
 	fd = open(filename, O_RDONLY);
@@ -100,6 +108,5 @@ void vdAllocate(char *diskname, char *filename) {
 int main(int argc, char **argv) {
     // printf("%ld\n", sizeof(FMD));
     // exit(1);
-
 	vdAllocate(argv[1], argv[2]);   
 }

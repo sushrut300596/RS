@@ -1,36 +1,36 @@
 #include "vda.h"
 
 int add_file(char *diskname, char *filename, SB *sb, FMD *fmd, int block_no) {
-    FMD *fmd1 = NULL;
+    int no_blocks_flags;
+    static int no_files = 0;
     d = open(diskname, O_RDWR);
     fd = open(filename, O_RDONLY);
     fmd->file_size = lseek(fd, 0, SEEK_END);
     lseek(fd, 0, SEEK_SET);
     unsigned char *buf = (unsigned char *)malloc(sizeof(unsigned char) * buf_size);
     unsigned char *read_buf = (unsigned char *)malloc(sizeof(unsigned char) * buf_size);
-    int i = 0, j = 0;
-    while(i < sb->size_fmd) {
-        i = read(d, fmd1, sizeof(FMD));
-        if((strcmp(fmd1->file_name, filename)) == 0) {
-            printf("File is not inserted because file exist\n");
-            break;
-        }
-        else {
-            strcpy(fmd->file_name, filename);        
-        }
-        if(fmd1->b == 1) {
-            if(fmd1->file_size >= fmd->file_size) {
 
-            }
-        }
-        i += i;
+    if(sb->size_bitmap > sb->size_block) {
+        no_blocks_flags = my_ceil((double)sb->size_bitmap/sb->size_block);
+        lseek(d, ((no_blocks_flags * sb->size_block) + (no_files * sizeof(FMD))), SEEK_SET);
+    }
+    else if(sb->size_bitmap < sb->size_block) {
+        lseek(d, (sb->size_block + (no_files * sizeof(FMD))), SEEK_SET);        
+    }
+    else {
+        lseek(d, ((2 * sb->size_block) + (no_files * sizeof(FMD))), SEEK_SET);
     }
     
-    
+    strcpy(fmd->file_name, filename);
     fmd->block_no = block_no;
-    lseek(d, (sb->size_bitmap * 4), SEEK_SET);
+    fmd->b = 1;
+
     write(d, fmd, sizeof(FMD));
-    lseek(d, sb->size_fmd, SEEK_SET);
+    
+    no_files++;
+
+    lseek(d, (block_no * sb->size_block), SEEK_SET);
+
     int n;
     int i = 0;
     int count = 0;

@@ -72,10 +72,10 @@ void vdCreate(char *diskname, int size, char b) {
 	
 	n = write(d, sb, sb_size);
 	
-	if(sb->size_bitmap > 1024) {
+	if(sb->size_bitmap > sb->size_block) {
 		no_blocks_flags = my_ceil((double)sb->size_bitmap/sb->size_block);
 	}
-	else if(sb->size_bitmap < 1024) {
+	else if(sb->size_bitmap < sb->size_block) {
 		no_blocks_flags = 1;
 	}
 	else {
@@ -107,7 +107,7 @@ void vdCreate(char *diskname, int size, char b) {
 	}
 	
 	n = write(d, buf, sb->size_bitmap);
-	
+
 	printf("size_disk : %ld\n", sb->size_disk);
 	printf("no_blocks : %d\n", no_blocks);
 	printf("md_bytes : %d\n", md_bytes);
