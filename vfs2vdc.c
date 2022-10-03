@@ -10,8 +10,6 @@
 // #define SIZE 1024
 // #define SIZE 1024*1024
 
-int buf_size = 1024 * 1024;
-
 void vdCreate(char *diskname, int size, char b) {
 	SB *sb = (SB *)malloc(sizeof(struct SB));
 	if(b == 'M') {

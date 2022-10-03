@@ -4,3 +4,5 @@ typedef struct SB{
 	long size_fmd;
 	long size_bitmap;
 } SB;
+
+int buf_size = 1024;

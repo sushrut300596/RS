@@ -7,7 +7,7 @@
 #include "bitmap.h"
 
 unsigned char *bitmap_to_array(SB *sb) {
-    printf("%ld\n", sb->size_bitmap);
+    // printf("%ld\n", sb->size_bitmap);
     unsigned char *bmap = (unsigned char *)malloc(sizeof(unsigned char) * sb->size_bitmap); 
     lseek(d, sizeof(SB), SEEK_SET);
     int n;
@@ -34,7 +34,7 @@ void find_empty_blocks(unsigned char *bmap, SB *sb) {
         j = 0;
         i++;
     }
-    printf("%d\n", free_blocks);
+    // printf("%d\n", free_blocks);
 }
 
 void set_bitmap(unsigned char *bmap) {

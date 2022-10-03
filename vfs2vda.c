@@ -5,16 +5,10 @@
 #include <sys/types.h>
 #include <fcntl.h>
 #include "math.h"
-#include "bitmap.c"
+#include "vda.c"
 
 #define BUF_SIZE 1024
 #define FILE_SIZE_MULTIPLE 1024
-
-typedef struct FMD {
-	char file_name[248];
-	int file_size;
-	int block_no;
-} FMD;
 
 void vdAllocate(char *diskname, char *filename) {
 	FMD *fmd = malloc(sizeof(FMD));
