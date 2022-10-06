@@ -42,11 +42,5 @@
 		"powershell": "latest",
 		"dotnet": "latest",
 		"jupyterlab": "latest"
-	},
-	
-	"hostRequirements": {
-		"cpus": 16,
-		"memory": "16gb",
-		"storage": "64gb" 
 	}
 }
