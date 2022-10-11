@@ -34,7 +34,9 @@ void vdCreate(char *diskname, int size, char b) {
 	int no_bit_move = 0;
 
 	sb->size_fmd = my_ceil((double)sb->size_disk/100)*3;
+	sb->no_files = my_ceil((double)sb->size_fmd/256);
 	printf("size_fmd : %ld\n", sb->size_fmd);
+	printf("no_files : %d\n", sb->no_files);
 	int no_blocks_fmd = my_ceil((double)sb->size_fmd/sb->size_block);
 
 	printf("no_blocks_fmd : %d\n", no_blocks_fmd);
@@ -73,7 +75,7 @@ void vdCreate(char *diskname, int size, char b) {
 	n = write(d, sb, sb_size);
 	
 	if(sb->size_bitmap > sb->size_block) {
-		no_blocks_flags = my_ceil((double)sb->size_bitmap/sb->size_block);
+		no_blocks_flags = (my_ceil((double)sb->size_bitmap/sb->size_block));
 	}
 	else if(sb->size_bitmap < sb->size_block) {
 		no_blocks_flags = 1;
@@ -90,7 +92,7 @@ void vdCreate(char *diskname, int size, char b) {
 
 	printf("no_blocks_flags : %d\n", no_blocks_flags);
 	
-	no_bit_move += no_blocks_flags;
+	no_bit_move += (no_blocks_flags + 1);
 
 	printf("no_bit_move : %d\n", no_bit_move);
 	
@@ -105,6 +107,8 @@ void vdCreate(char *diskname, int size, char b) {
 		i++;
 		no_bit_move -= 8;
 	}
+
+	lseek(d, sb->size_block, SEEK_SET);
 	
 	n = write(d, buf, sb->size_bitmap);
 

@@ -63,11 +63,11 @@ void set_bitmap(unsigned char *bmap, int no_blocks) {
     unsigned char *bmap = bitmap_to_array(sb);
     int free_blocks = find_empty_blocks(bmap, sb);
     int block_no = find_first_empty_block(free_blocks, sb);
-    // printf("%d\n", block_no);
-    // int i = 0;
-    // while(i < sb->size_bitmap) {
-    //     printf("%02x\t", bmap[i]);
-    //     i++;
-    // }
-    // printf("\n");
+    printf("%d\n", block_no);
+    int i = 0;
+    while(i < sb->size_bitmap) {
+        printf("%02x\t", bmap[i]);
+        i++;
+    }
+    printf("\n");
 }*/
