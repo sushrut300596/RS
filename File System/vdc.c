@@ -1,9 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <fcntl.h>
-#include <math.h>
 #include "vdc.h"
 
 void vdCreate(char *diskname, int size_disk, char bytes_disk, int size_block, char bytes_block) {
@@ -119,6 +113,8 @@ void vdCreate(char *diskname, int size_disk, char bytes_disk, int size_block, ch
 	
 	n = write(d, buf, size_bitmap);
 
+	
+
 	printf("size_disk : %ld\n", sb->size_disk);
 	printf("no_blocks : %d\n", no_blocks);
 	printf("md_bytes : %d\n", md_bytes);
@@ -127,7 +123,7 @@ void vdCreate(char *diskname, int size_disk, char bytes_disk, int size_block, ch
 }
 
 int main(int argc, char **argv) {
-	// printf("%ld\n", sizeof(SB));
+	// printf("%ld\n", sizeof(FMD));
 	// exit(1);
 	vdCreate(argv[1], atoi(argv[2]), argv[3][0], atoi(argv[4]), argv[5][0]);
 }
