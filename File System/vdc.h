@@ -4,7 +4,7 @@ typedef struct SB{
 } SB;
 
 typedef struct FMD {
-	char file_name[244];
+	char file_name[243];
 	long file_size;
 	int block_no;
 	unsigned char b;
