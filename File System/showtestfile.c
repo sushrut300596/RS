@@ -10,14 +10,14 @@ void showFile(char *filename, int start, int count) {
 	int fd;
 	fd = open(filename, O_RDONLY);
 	lseek(fd, start, SEEK_SET);
-	unsigned char *str = malloc(count * sizeof(char));
+	unsigned char *str = (unsigned char *)malloc(count * sizeof(unsigned char));
 	int n;
-	int i = 0, j = 0;
+	int i = 0;
     int count0 = 0;
 	if(fd != -1) {
 		n = read(fd, str, count);
 		while(i < n) {
-			if(i % 8 == 0) {
+			if(i % 9 == 0) {
 				printf("\n");
 			}
 			else {
