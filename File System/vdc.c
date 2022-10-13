@@ -79,7 +79,7 @@ void vdCreate(char *diskname, int size_disk, char bytes_disk, int size_block, ch
 	// 	i++;
 	// }
 	
-	n = write(d, sb, sb->size_block);
+	n = write(d, sb, sb_size);
 	
 	if(size_bitmap > sb->size_block) {
 		no_blocks_flags = (ceil((double)size_bitmap/sb->size_block));
@@ -115,7 +115,7 @@ void vdCreate(char *diskname, int size_disk, char bytes_disk, int size_block, ch
 		no_bit_move -= 8;
 	}
 
-	// lseek(d, sb->size_block, SEEK_SET);
+	lseek(d, sb->size_block, SEEK_SET);
 	
 	n = write(d, buf, size_bitmap);
 

@@ -9,6 +9,7 @@
 void showFile(char *filename, int start, int count) {
 	int fd;
 	fd = open(filename, O_RDONLY);
+	lseek(fd, start, SEEK_SET);
 	unsigned char *str = malloc(count * sizeof(char));
 	int n;
 	int i = 0, j = 0;
@@ -20,7 +21,7 @@ void showFile(char *filename, int start, int count) {
 				printf("\n");
 			}
 			else {
-				printf("%x\t", str[i]);
+				printf("%02x\t", str[i]);
                 if(str[i] == 0x00) {
                     count0++;
                 }
