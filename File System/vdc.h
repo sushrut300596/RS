@@ -5,7 +5,7 @@ typedef struct SB{
 
 typedef struct FMD {
 	char file_name[244];
-	int file_size;
+	long file_size;
 	int block_no;
-	int b;
+	unsigned char b;
 } FMD;
