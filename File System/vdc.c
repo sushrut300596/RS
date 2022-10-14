@@ -65,10 +65,10 @@ void vdCreate(char *diskname, int size_disk, char bytes_disk, int size_block, ch
 	int no_bit_move = 0;
 
 	int size_fmd = ceil((double)sb->size_disk/100)*3;
-	// printf("size_fmd : %d\n", size_fmd);
+	printf("size_fmd : %d\n", size_fmd);
 
 	int no_blocks_fmd = ceil((double)size_fmd/sb->size_block);
-	// printf("no_blocks_fmd : %d\n", no_blocks_fmd);
+	printf("no_blocks_fmd : %d\n", no_blocks_fmd);
 
 	no_bit_move += no_blocks_fmd;
 
@@ -107,11 +107,11 @@ void vdCreate(char *diskname, int size_disk, char bytes_disk, int size_block, ch
 		i++;
 	}
 
-	// printf("no_blocks_flags : %d\n", no_blocks_flags);
+	printf("no_blocks_flags : %d\n", no_blocks_flags);
 	
 	no_bit_move += (no_blocks_flags + 1);
 
-	// printf("no_bit_move : %d\n", no_bit_move);
+	printf("no_bit_move : %d\n", no_bit_move);
 	
 	i = 0;
 	while(no_bit_move >= 0) {
@@ -131,11 +131,11 @@ void vdCreate(char *diskname, int size_disk, char bytes_disk, int size_block, ch
 
 	
 
-	// printf("size_disk : %ld\n", sb->size_disk);
-	// printf("no_blocks : %d\n", no_blocks);
-	// printf("md_bytes : %d\n", md_bytes);
-	// printf("sb_size : %d\n", sb_size);
-	// printf("flag_bytes : %d\n", size_bitmap);
+	printf("size_disk : %ld\n", sb->size_disk);
+	printf("no_blocks : %d\n", no_blocks);
+	printf("md_bytes : %d\n", md_bytes);
+	printf("sb_size : %d\n", sb_size);
+	printf("flag_bytes : %d\n", size_bitmap);
 }
 
 int main(int argc, char **argv) {
