@@ -4,7 +4,7 @@ void vdCreate(char *diskname, int size_disk, char bytes_disk, int size_block, ch
 	SB *sb = (SB *)malloc(sizeof(struct SB));
 
 	if(bytes_disk == 'M') {
-		if(size_disk < 1) {
+		if(size_disk < 512) {
 			printf("cannot give that low disk\n");
 		}
 		else {

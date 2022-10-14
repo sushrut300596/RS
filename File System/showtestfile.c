@@ -17,7 +17,7 @@ void showFile(char *filename, int start, int count) {
 	if(fd != -1) {
 		n = read(fd, str, count);
 		while(i < n) {
-			if(i % 9 == 0) {
+			if(i % 8 == 0) {
 				printf("\n");
 			}
 			printf("%02x\t", str[i]);
