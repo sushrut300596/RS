@@ -20,12 +20,10 @@ void showFile(char *filename, int start, int count) {
 			if(i % 9 == 0) {
 				printf("\n");
 			}
-			else {
-				printf("%02x\t", str[i]);
-                if(str[i] == 0x00) {
-                    count0++;
-                }
-			}
+			printf("%02x\t", str[i]);
+            if(str[i] == 0x00) {
+                count0++;
+            }
 			i++;
 		}
 	}
