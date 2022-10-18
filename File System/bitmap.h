@@ -6,3 +6,5 @@
 #include <fcntl.h>
 #include <math.h>
 
+int d;
+

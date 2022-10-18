@@ -84,10 +84,6 @@ void vdCreate(char *diskname, int size_disk, char bytes_disk, int size_block, ch
 	lseek(d, 0, SEEK_SET);
 	
 	int n;
-	// while(i < sb_size) {
-	// 	buf[i] = ((char *)sb)[i];
-	// 	i++;
-	// }
 	
 	n = write(d, sb, sb_size);
 	
