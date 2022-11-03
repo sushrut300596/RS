@@ -6,5 +6,6 @@
 #include <fcntl.h>
 #include <math.h>
 
-int d;
+#include "diskdriver.c"
 
+int d;
