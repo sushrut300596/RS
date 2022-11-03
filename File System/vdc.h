@@ -14,5 +14,5 @@ typedef struct FMD {
 	char file_name[240];
 	long file_size;
 	int block_no;
-	unsigned char b;
+	unsigned char flag;
 } FMD;
