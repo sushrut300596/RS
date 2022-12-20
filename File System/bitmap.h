@@ -9,3 +9,5 @@
 #include "diskdriver.c"
 
 int d;
+
+#define ERROR_RESEARCH_FAULT -1
