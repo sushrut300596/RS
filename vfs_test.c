@@ -29,7 +29,6 @@ int main() {
 
 	a ^= 0x0000000000000000;
 
-	
 	printf("%lx", a);
 	printf("\n");
 }
